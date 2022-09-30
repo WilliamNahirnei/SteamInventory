@@ -21,31 +21,20 @@ public class UserService {
 
     @Transactional
     public UserModel save (UserDTO userDTO) throws Exception {
+        validateUniqueAttributes(userDTO);
         var userModel = new UserModel();
         BeanUtils.copyProperties(userDTO, userModel);
         userModel.setUser_type(UserType.USER);
         return userRepository.save(userModel);
     }
-//    private void validateUniqueAttributes(ParkingSpotDTO parkingSpotDTO) throws ValidationException {
-//        if (this.existsByLicensePlateCar(parkingSpotDTO.getLicensePlateCar()))
-//            throw new ValidationException("Conflict: License plate car is alert in use", 409, "Conflict: License plate car is alert in use");
-//        if (this.existsByParkingSpotNumber(parkingSpotDTO.getParkingSpotNumber()))
-//            throw new ValidationException("Conflict: Parking spot is already in use", 409, "Conflict: Parking spot is already in use");
-//        if (this.existsByApartmentAndBlock(parkingSpotDTO.getApartment(), parkingSpotDTO.getBlock()))
-//            throw new ValidationException("Conflict: Parking spot already registered in this apartment and block", 409, "Conflict: Parking spot already registered in this apartment and block");
-//    }
+    private void validateUniqueAttributes(UserDTO userDTO) throws ValidationException {
+        if (this.existsByEmail(userDTO.getEmail()))
+            throw new ValidationException("Conflict: e-mail is alert in use", 409, "Conflict: email is alert in use");
+    }
 
-//    public  boolean existsByLicensePlateCar(String licensePlateCar) {
-//        return parkingSpotRepository.existsByLicensePlateCar(licensePlateCar);
-//    }
-//
-//    public boolean existsByParkingSpotNumber(String parkingSpotNumber) {
-//        return parkingSpotRepository.existsByParkingSpotNumber(parkingSpotNumber);
-//    }
-//
-//    public boolean existsByApartmentAndBlock(String apartment, String block) {
-//        return parkingSpotRepository.existsByApartmentAndBlock(apartment, block);
-//    }
+    public  boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
 
     public Page<UserModel> findAll(Pageable pageable) {
         return userRepository.findAll(pageable);
