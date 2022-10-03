@@ -12,6 +12,9 @@ public class ItemModel {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
+    @Column(nullable = false, length = 30)
+    private String name;
+
     public UUID getId() {
         return id;
     }
@@ -27,7 +30,4 @@ public class ItemModel {
     public void setName(String name) {
         this.name = name;
     }
-
-    @Column(nullable = false, length = 30)
-    private String name;
 }
