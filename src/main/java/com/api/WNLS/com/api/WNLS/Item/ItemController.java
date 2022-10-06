@@ -1,6 +1,5 @@
 package com.api.WNLS.com.api.WNLS.Item;
 
-import com.api.WNLS.com.api.WNLS.User.UserModel;
 import com.api.WNLS.com.api.WNLS.Utils.Exceptions.ValidationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,6 +42,20 @@ public class ItemController {
     public ResponseEntity<Object> getItemById(@PathVariable(value = "id") UUID id){
         try{
             return ResponseEntity.status(HttpStatus.OK).body(itemService.findById(id));
+        }
+        catch (ValidationException e){
+            return ResponseEntity.status(e.getHttpCode()).body(e.getValidationMessage());
+        }
+        catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
+        }
+    }
+
+    @PutMapping("/{id}")
+    ResponseEntity<Object> updateItem(@PathVariable(value = "id") UUID id,
+                                      @RequestBody @Valid ItemDTO itemDTO){
+        try{
+            return ResponseEntity.status(HttpStatus.OK).body(itemService.upddate(id, itemDTO));
         }
         catch (ValidationException e){
             return ResponseEntity.status(e.getHttpCode()).body(e.getValidationMessage());
