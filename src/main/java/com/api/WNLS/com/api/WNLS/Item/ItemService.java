@@ -5,17 +5,20 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.UUID;
 
+@Service
 public class ItemService {
     final ItemRepository itemRepository;
 
     public ItemService(ItemRepository itemRepository) {
         this.itemRepository = itemRepository;
     }
+
 
     @Transactional
     public ItemModel save (ItemDTO itemDTO) {
