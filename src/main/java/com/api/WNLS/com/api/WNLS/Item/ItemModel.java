@@ -1,11 +1,12 @@
 package com.api.WNLS.com.api.WNLS.Item;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.UUID;
 
 @Entity
 @Table(name = "item")
-public class ItemModel {
+public class ItemModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
