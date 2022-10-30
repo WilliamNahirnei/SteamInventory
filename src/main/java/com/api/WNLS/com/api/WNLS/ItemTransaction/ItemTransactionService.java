@@ -1,6 +1,8 @@
 package com.api.WNLS.com.api.WNLS.ItemTransaction;
 
+import com.api.WNLS.com.api.WNLS.Item.ItemModel;
 import com.api.WNLS.com.api.WNLS.Item.ItemService;
+import com.api.WNLS.com.api.WNLS.User.UserModel;
 import com.api.WNLS.com.api.WNLS.User.UserService;
 import com.api.WNLS.com.api.WNLS.Utils.Exceptions.ValidationException;
 import org.springframework.beans.BeanUtils;
@@ -27,11 +29,14 @@ public class ItemTransactionService {
     @Transactional
     public ItemTransactionModel save(ItemTransactionDTO itemTransactionDTO) throws ValidationException {
 
-        userService.findById(itemTransactionDTO.getId_user());
-        itemService.findById(itemTransactionDTO.getId_item());
+        UserModel user = userService.findById(itemTransactionDTO.getId_user());
+        ItemModel item = itemService.findById(itemTransactionDTO.getId_item());
 
         var itemTransaction = new ItemTransactionModel();
         BeanUtils.copyProperties(itemTransactionDTO, itemTransaction);
+        itemTransaction.setItem(item);
+        itemTransaction.setUser(user);
+//        System.out.println(itemTransaction.getUser().getId());
         return itemTransactionRepository.save(itemTransaction);
     }
 }
