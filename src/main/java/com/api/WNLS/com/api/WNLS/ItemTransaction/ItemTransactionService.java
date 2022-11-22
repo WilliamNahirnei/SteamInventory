@@ -6,9 +6,12 @@ import com.api.WNLS.com.api.WNLS.User.UserModel;
 import com.api.WNLS.com.api.WNLS.User.UserService;
 import com.api.WNLS.com.api.WNLS.Utils.Exceptions.ValidationException;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ItemTransactionService {
@@ -26,6 +29,12 @@ public class ItemTransactionService {
         this.itemService = itemService;
     }
 
+    public ItemTransactionModel findById(UUID id) throws ValidationException {
+        Optional<ItemTransactionModel> itemTransaction = itemTransactionRepository.findById(id);
+        if (!itemTransaction.isPresent())
+            throw new ValidationException("Transaction not found", HttpStatus.NOT_FOUND.value(), "Transaction not Found");
+        return itemTransaction.get();
+    }
     @Transactional
     public ItemTransactionModel save(ItemTransactionDTO itemTransactionDTO) throws ValidationException {
 
@@ -36,7 +45,15 @@ public class ItemTransactionService {
         BeanUtils.copyProperties(itemTransactionDTO, itemTransaction);
         itemTransaction.setItem(item);
         itemTransaction.setUser(user);
-//        System.out.println(itemTransaction.getUser().getId());
+
+        return itemTransactionRepository.save(itemTransaction);
+    }
+
+    @Transactional
+    public ItemTransactionModel update(UUID id, ItemTransactionDTO itemTransactionDTO) throws ValidationException {
+        var itemTransaction = this.findById(id);
+        BeanUtils.copyProperties(itemTransactionDTO, itemTransaction);
+
         return itemTransactionRepository.save(itemTransaction);
     }
 }

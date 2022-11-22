@@ -12,11 +12,9 @@ import java.util.UUID;
 
 public class ItemTransactionDTO {
 
-    @NotNull
     @Min(0)
     private float buyPrice;
 
-    @NotNull()
     @DateTimeFormat()
     private Date buyDate;
 
@@ -30,10 +28,8 @@ public class ItemTransactionDTO {
 //    @ValueOfEnum(enumClass = ItemTransactionPhase.class, message = "Invalid transaction status")
     private ItemTransactionPhase transaction_phase;
 
-    @NotNull()
     private UUID id_item;
-
-    @NotNull()
+    
     private UUID id_user;
 
     public float getBuyPrice() {
